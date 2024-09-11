@@ -1,0 +1,54 @@
+name: 'publish-docs'
+description: 'Publish docs with nbdev to netlify'
+inputs:
+  NETLIFY_AUTH_TOKEN:
+    description: Auth token to use with netlify
+    required: true
+    default: ""
+  NETLIFY_SITE_ID:
+    description: Your Netlify site id
+    required: true
+    default: ""
+  NETLIFY_DEPLOY_TO_PROD:
+    description: Should the site be deployed to production?
+    required: false
+    default: "true"
+  NETLIFY_DEPLOY_MESSAGE:
+    description: A deploy message
+    required: false
+    default: "Deployed from GitHub action"
+  build_directory:
+    description: Directory where built files are stored
+    required: false
+    default: _docs
+  python_version:
+    description: 'Version of python to set up'
+    required: false
+    default: "3.12"
+  
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        python-version: ${{ inputs.python_version }}
+        cache: "pip"
+        cache-dependency-path: settings.ini
+    - name: Install Dependencies
+      shell: bash
+      run: |
+        set -ux
+        python -m pip install --upgrade pip
+        pip install -Uq nbdev
+        nbdev_docs
+    - name: Deploy to Netlify
+      uses: jsmrcaga/action-netlify-deploy@v2.0.0
+      with:
+        NETLIFY_AUTH_TOKEN: ${{ inputs.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ inputs.NETLIFY_SITE_ID }}
+        NETLIFY_DEPLOY_MESSAGE: ${{ inputs.NETLIFY_DEPLOY_MESSAGE }}
+        NETLIFY_DEPLOY_TO_PROD: ${{ inputs.NETLIFY_DEPLOY_TO_PROD }}
+        install_command: "echo Install not required: skipped"
+        build_command: "echo Build not required: skipped"
+        build_directory: ${{ inputs.build_directory }}
