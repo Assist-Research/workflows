@@ -19,7 +19,7 @@ jobs:
   deploy:
     name: 'Deploy to Netlify'
     steps:
-      - uses: assist-research/worklows/nbdev-netlify@v1.0.0
+      - uses: assist-research/worklows/nbdev-netlify@main
         with:
           NETLIFY_AUTH_TOKEN: ${{ secrets.MY_TOKEN_SECRET }}
           NETLIFY_SITE_ID: ${{ secrets.MY_SITE_ID_SECRET }}
