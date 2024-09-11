@@ -40,6 +40,7 @@ runs:
       run: |
         set -ux
         python -m pip install --upgrade pip
+        pip install setuptools
         pip install -Uq nbdev
         nbdev_docs
     - name: Deploy to Netlify
