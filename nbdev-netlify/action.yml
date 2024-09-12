@@ -30,6 +30,7 @@ runs:
         pip install setuptools
         pip install -Uq nbdev
         nbdev_docs
+        npm install netlify-cli -g
     - name: Deploy to Netlify
       uses: jsmrcaga/action-netlify-deploy@v2.0.0
       with:
@@ -40,4 +41,4 @@ runs:
         install_command: "echo Install not required: skipped"
         build_command: "echo Build not required: skipped"
         build_directory: ${{ inputs.build_directory }}
-        netlify_path: 'npx netlify'
+        
