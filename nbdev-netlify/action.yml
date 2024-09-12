@@ -28,6 +28,7 @@ runs:
         pip install -Uq nbdev
         nbdev_proc_nbs
         cp _quarto.yml ./_proc/_quarto.yml
+        cp _publish.yml ./_proc/_publish.yml
     
     - name: Render and Publish 
       uses: quarto-dev/quarto-actions/publish@v2
