@@ -19,6 +19,10 @@ runs:
         python-version: ${{ inputs.python_version }}
         cache: "pip"
         cache-dependency-path: settings.ini
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
     - name: Install Dependencies
       shell: bash
       run: |
@@ -26,13 +30,15 @@ runs:
         python -m pip install --upgrade pip
         pip install setuptools
         pip install -Uq nbdev
-        nbdev_proc_nbs
-        cp _quarto.yml ./_proc/_quarto.yml
-        cp _publish.yml ./_proc/_publish.yml
-    
-    - name: Render and Publish 
-      uses: quarto-dev/quarto-actions/publish@v2
+        nbdev_docs
+    - name: Deploy to Netlify
+      uses: jsmrcaga/action-netlify-deploy@v2.0.0
       with:
-        path: _proc
-        target: netlify
-        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_AUTH_TOKEN: ${{ inputs.NETLIFY_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ inputs.NETLIFY_SITE_ID }}
+        NETLIFY_DEPLOY_MESSAGE: ${{ inputs.NETLIFY_DEPLOY_MESSAGE }}
+        NETLIFY_DEPLOY_TO_PROD: ${{ inputs.NETLIFY_DEPLOY_TO_PROD }}
+        install_command: "echo Install not required: skipped"
+        build_command: "echo Build not required: skipped"
+        build_directory: ${{ inputs.build_directory }}
+        netlify_path: 'npx netlify'
