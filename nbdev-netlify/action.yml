@@ -35,6 +35,10 @@ runs:
         python-version: ${{ inputs.python_version }}
         cache: "pip"
         cache-dependency-path: settings.ini
+    - uses: actions/setup-node@v4
+      with:
+        node-version: 20
+        cache: 'npm'
     - name: Install Dependencies
       shell: bash
       run: |
@@ -53,3 +57,4 @@ runs:
         install_command: "echo Install not required: skipped"
         build_command: "echo Build not required: skipped"
         build_directory: ${{ inputs.build_directory }}
+        netlify_path: 'npx netlify'
